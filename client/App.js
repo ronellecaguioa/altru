@@ -5,16 +5,11 @@ import Navbar from './components/Navbar'
 import Contact from './components/Contact'
 import About from './components/About'
 import Register from './components/Register'
+import Donate from './components/Donate'
+import Views from './components/Views'
 
 
 class App extends Component {
-  componentDidMount() {
-    // Testing connection to proxy
-    fetch('/api')
-      .then((res) => res.json())
-      .then((data) => {console.log(data)})
-      .catch((err) => console.log(err))
-  }
 
   render() {
     return (
@@ -22,11 +17,13 @@ class App extends Component {
         <Navbar />
         <div style={mainStyle}>
           <Route exact path='/' render={() => (
-            <div>hey there</div>
+            <h1>Welcome to Altru</h1>
           )}/>
-          <Route exact path='/about' component={About}/>
-          <Route exact path='/contact' component={Contact} />
-          <Route exact path='/register' component={Register} />
+          <Route path='/about' component={About}/>
+          <Route path='/contact' component={Contact} />
+          <Route path='/register' component={Register} />
+          <Route path='/donate' component={Donate} />
+          <Route path='/views' component={Views} />
         </div>
       </Router>
     );

@@ -13,6 +13,7 @@
 body {
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
   font-size: 16px;
+  background-color: #f4f4f4;
 }
 
 .link {
@@ -29,42 +30,56 @@ body {
   background-color: #aaa;
 }
 
-.btn {
-  padding: 10px;
-  background-color: #f4f4f4;
-  color: #333;
-  border: thin solid black;
-  border-radius: 5px;
-  background-color: coral;
-  font-weight: 700;
-  transition: background-color 0.2s, color 0.2s;
-}
-
-.btn:hover {
-  background-color: rgb(209, 104, 66);
-  color: #fff;
-}
-
 form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 50%;
-  margin: 0 25%;
-  border: thin solid #aaa;
-
+  width: 60%;
+  margin: 100px 20%;
+  padding: 50px;
+  border: thin solid #555;
+  border-radius: 3px;
 }
 
 label {
-  width: 100%;
-  display: flex
+  margin: 15px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-input {
-  margin-bottom: 10px;
-  width: 80%;
-  justify-items: right;
-  padding: 10px;
+input,
+select {
+  padding: 5px;
+  flex: 1;
+  margin-left: 10px
+}
+
+button {
+  border: thin solid black;
   border-radius: 5px;
+  background-color: #00704a;
+  color: #fff;
+  padding: 3px;
+  font-size: 120%;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+button:hover {
+  background-color: #004e34;
+}
+
+.allEntries {
+  width: 80%;
+  margin: 0 10%;
+}
+
+.entry {
+  border: thin solid black;
+  padding: 10px;
+  margin: 5px 0;
+  transition: background-color 0.2s;
+}
+
+.entry:hover {
+  background-color: #e9e8e8;
 }

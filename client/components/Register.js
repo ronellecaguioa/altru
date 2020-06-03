@@ -27,6 +27,7 @@ class Register extends Component {
     return (
       <Fragment>
         <form onSubmit={this.handleSubmit} className="form">
+          <h1>Make An Account</h1>
           <label>
             Username
             <input type="text" placeholder="Username..." name="username" value={this.state.username}onChange={this.handleChange} required />
@@ -39,7 +40,7 @@ class Register extends Component {
             Password
             <input type="password" placeholder="Password..." name="password" value={this.state.password}onChange={this.handleChange} required />
           </label>
-          <button className="btn">Register for Altru</button>
+          <button>Register for Altru</button>
         </form>
       </Fragment>
     );
