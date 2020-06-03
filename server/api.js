@@ -8,15 +8,15 @@ router.get('/', (req, res) => {
 });
 
 /**
- * @route   GET /api/donations
- * @desc    Get all items from DB
+ * @route   GET /api/donations/:table
+ * @desc    Get all entries from specified table
  * @access  Public
  */
-router.get('/donations', async (req, res) => {
+router.get('/:table', async (req, res) => {
   try {
-    const query = 'SELECT * FROM items;';
+    const query = `SELECT * FROM ${req.params.table};`;
     const result = await db.query(query);
-    res.status(200).json({ items: result.rows });
+    res.json({ result: result.rows });
   } catch ({ message }) {
     res.status(400).json({ message });
   }
@@ -28,21 +28,21 @@ router.get('/donations', async (req, res) => {
  * @access  Public
  */
 router.post('/', async (req, res) => {
-  // Destructure the request body
-  const { items, destination, pickup_by, pickup_from } = req.body;
-
-  // Prepare queries
-  const deliveryQuery = `
-    INSERT INTO deliveries (id, destination, pickup_by, pickup_from)
-    VALUES (uuid_generate_v4(), $1, $2, $3)
-    RETURNING *;
-  `;
-  const itemsQuery = `
-    INSERT INTO items (id, name, quantity, deliveries_id)
-    VALUES (uuid_generate_v4(), $1, $2, $3);
-  `;
-
   try {
+    // Destructure the request body
+    const { items, destination, pickup_by, pickup_from } = req.body;
+
+    // Prepare queries
+    const deliveryQuery = `
+      INSERT INTO deliveries (id, destination, pickup_by, pickup_from)
+      VALUES (uuid_generate_v4(), $1, $2, $3)
+      RETURNING *;
+    `;
+    const itemsQuery = `
+      INSERT INTO items (id, name, quantity, deliveries_id)
+      VALUES (uuid_generate_v4(), $1, $2, $3);
+    `;
+
     // Add new delivery entry
     const result = await db.query(deliveryQuery, [destination, pickup_by, pickup_from]);
 
@@ -63,51 +63,149 @@ router.post('/', async (req, res) => {
 });
 
 /**
- * @route   patch /api/donations/item/:id
+ * @route   PATCH /api/donations/item/:id
  * @desc    Change information about an existing item
  * @access  Public
  */
 router.patch('/item/:id', async (req, res) => {
-  const id = req.params.id;
-  const { name, quantity } = req.body;
-  let changes;
-
-  if (name && quantity) {
-    // Updating name and quantity
-    changes = `
-      SET (name, quantity) = ('${name}', ${quantity})`;
-
-  } else if (name) {
-    // Updating name only
-    changes = `SET name = '${name}'`;
-
-  } else if (quantity) {
-    // Updating quantity only
-    changes = `SET quantity = ${quantity}`;
-  }
-
-  // Construct final query
-  const query = `
-    UPDATE items
-    ${changes}
-    WHERE id = '${id}'
-    RETURNING *;`;
   try {
-    const result = await db.query(query)
+    const id = req.params.id;
+    const { name, quantity } = req.body;
+    let changes;
+
+    if (name && quantity) {
+      // Updating name and quantity
+      changes = `SET name = '${name}', quantity = ${quantity}`;
+    } else if (name) {
+      // Updating name only
+      changes = `SET name = '${name}'`;
+    } else if (quantity) {
+      // Updating quantity only
+      changes = `SET quantity = ${quantity}`;
+    }
+
+    // Construct final query
+    const query = `
+      UPDATE items
+      ${changes}
+      WHERE id = '${id}'
+      RETURNING *;`;
+
+    const result = await db.query(query);
+
+    // Send back successful response
     res.json({
       message: 'Successfully updated items',
-      item: result.rows[0]
-    })
+      item: result.rows[0],
+    });
   } catch ({ message }) {
-    res.json({ message })
+    // Send back error message
+    res.status(418).json({ message });
   }
 });
 
 /**
- * @route   patch /api/donations/delivery/:id
+ * @route   PATCJ /api/donations/delivery/:id
  * @desc    Change information about an existing delivery
  * @access  Public
  */
-router.patch('/delivery/:id', (req, res) => {});
+router.patch('/delivery/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { destination, pickup_by, pickup_from } = req.body;
+    let changes = [];
+
+    // Update destinations as needed
+    if (destination) changes.push(`destination = '${destination}'`);
+
+    if (pickup_by) changes.push(`pickup_by = '${pickup_by}'`);
+
+    if (pickup_from) changes.push(`pickup_from = '${pickup_from}'`);
+
+    // Construct final query
+    changes = 'SET ' + changes.join(', ');
+
+    const query = `
+      UPDATE deliveries
+      ${changes}
+      WHERE id = '${id}'
+      RETURNING *;`;
+
+    const result = await db.query(query);
+
+    // Send back successful response
+    res.json({
+      message: 'Successfully updated delivery',
+      delivery: result.rows[0],
+    });
+  } catch ({ message }) {
+    // Send back error message
+    res.status(418).json({ message });
+  }
+});
+
+/**
+ * @route   DELETE /api/donations/delivery/:id
+ * @desc    Cancel an existing delivery
+ * @access  Public
+ */
+router.delete('/delivery/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const itemsQuery = `
+      DELETE FROM items
+      WHERE deliveries_id = '${id}'
+      RETURNING *;`;
+
+    const deletedItems = await db.query(itemsQuery);
+    console.log(deletedItems);
+
+    const deliveryQuery = `
+      DELETE FROM deliveries
+      WHERE id = '${id}'
+      RETURNING *;`;
+
+    const deletedDelivery = await db.query(deliveryQuery);
+
+    // Send back successful response with deleted delivery and items
+    res.json({
+      message: 'Successfully cancelled delivery',
+      delivery: deletedDelivery.rows[0],
+      items: deletedItems.rows,
+    });
+  } catch ({ message }) {
+    // Send back error message
+    res.status(418).json({ message });
+  }
+});
+
+/**
+ * @route   DELETE /api/donations/item/:id
+ * @desc    Delete an item from a delivery
+ * @access  Public
+ */
+router.delete('/item/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // Construct query
+    const query = `
+      DELETE FROM items
+      WHERE id = '${id}'
+      RETURNING *;`;
+
+    const result = await db.query(query);
+
+    // Send back successful response with deleted item
+    res.json({
+      message: 'Successfully deleted item',
+      item: result.rows[0],
+    });
+  } catch ({ message }) {
+    // Send back error message
+    res.status(418).json({ message });
+  }
+});
 
 module.exports = router;
