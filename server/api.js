@@ -16,7 +16,7 @@ router.get('/:table', async (req, res) => {
   try {
     const query = `SELECT * FROM ${req.params.table};`;
     const result = await db.query(query);
-    res.json({ result: result.rows });
+    res.json({ data: result.rows });
   } catch ({ message }) {
     res.status(400).json({ message });
   }
@@ -31,6 +31,7 @@ router.post('/', async (req, res) => {
   try {
     // Destructure the request body
     const { items, destination, pickup_by, pickup_from } = req.body;
+    console.log('THE SERVER, ', req.body)
 
     // Prepare queries
     const deliveryQuery = `
@@ -55,7 +56,10 @@ router.post('/', async (req, res) => {
     }
 
     // Send successful message *** MAY be altered depending on the frontend ***
-    res.json({ message: 'success' });
+    res.json({
+      message: 'success',
+      data: result.rows[0]
+    });
   } catch ({ message }) {
     // Send 418 on unsuccessful response
     res.status(418).json({ message });

@@ -1,23 +1,17 @@
 import React, { Component } from 'react'
-import axios from 'axios'
+import { connect } from 'react-redux';
+import { getItems } from '../actions/viewActions'
 
 class Views extends Component {
-  state = {
-    items: []
-  }
-
   componentDidMount(){
-    axios.get('/api/donations/items')
-      .then(res => {
-        this.setState({ items: res.data.result })
-      })
-      .catch(err => console.log(err))
+    this.props.getItems()
   }
 
   render() {
+    const { items } = this.props.views
     return (
       <div className="allEntries">
-        {this.state.items.map(({id, name, quantity, deliveries_id}) => (
+        {items.map(({id, name, quantity, deliveries_id}) => (
           <div className="entry" key={id}>
             <div>ID Number: {id}</div>
             <div>Item Name: {name}</div>
@@ -30,4 +24,16 @@ class Views extends Component {
   }
 }
 
-export default Views;
+function mapStateToProps(state) {
+  return {
+    views: state.views
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getItems: () => dispatch(getItems())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Views);
