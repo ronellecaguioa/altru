@@ -2,17 +2,16 @@ const express = require('express');
 const path = require('path')
 const app = express();
 
+const donationsRouter = require('./api')
+
 
 // Body parsing middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-// Test route
-app.get('/api', (req, res) => {
-  res.json({
-    message: 'hitting the server!!!!!!!!'
-  })
-})
+
+
+app.use('/api/donations', donationsRouter)
 
 // Serve static files
 if (process.env.NODE_ENV === 'production') {
