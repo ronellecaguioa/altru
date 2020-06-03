@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // Redux
 import { Provider } from 'react-redux'
@@ -12,6 +12,7 @@ import About from './components/About'
 import Register from './components/Register'
 import Donate from './components/Donate'
 import Views from './components/Views'
+import PageNotFound from './components/PageNotFound'
 
 // Import styling
 import './App.css'
@@ -24,14 +25,17 @@ class App extends Component {
         <Router>
           <Navbar />
           <div style={mainStyle}>
-            <Route exact path='/' render={() => (
-              <h1>Welcome to Altru</h1>
-            )}/>
-            <Route path='/about' component={About}/>
-            <Route path='/contact' component={Contact} />
-            <Route path='/register' component={Register} />
-            <Route path='/donate' component={Donate} />
-            <Route path='/views' component={Views} />
+            <Switch>
+              <Route exact path='/' render={() => (
+                <h1>Welcome to Altru</h1>
+              )}/>
+              <Route exact path='/about' component={About}/>
+              <Route exact path='/contact' component={Contact} />
+              <Route exact path='/register' component={Register} />
+              <Route exact path='/donate' component={Donate} />
+              <Route exact path='/views' component={Views} />
+              <Route path='*' component={PageNotFound} />
+            </Switch>
           </div>
         </Router>
       </Provider>

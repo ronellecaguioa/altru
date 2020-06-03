@@ -1,39 +1,51 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getItems } from '../actions/viewActions'
+import { getItems, getDeliveries, deleteItem } from '../actions/viewActions';
 
 class Views extends Component {
-  componentDidMount(){
-    this.props.getItems()
+  componentDidMount() {
+    this.props.getDeliveries();
   }
 
   render() {
-    const { items } = this.props.views
+    const { deliveries, items } = this.props.views;
     return (
       <div className="allEntries">
-        {items.map(({id, name, quantity, deliveries_id}) => (
-          <div className="entry" key={id}>
-            <div>ID Number: {id}</div>
-            <div>Item Name: {name}</div>
-            <div>Item Qty: {quantity}</div>
-            <div>Apart of delivery: {deliveries_id}</div>
+        {deliveries.map(({ id, destination, pickup_by, pickup_from, completed }) => (
+          <div className="entry">
+            <h1>Delivery ID: {id}</h1>
+            <div>{destination}</div>
+            <div>{pickup_from}</div>
+            <div>{pickup_by}</div>
+            <div>{completed === '1' ? 'COMPLETED' : 'NOT COMPLETED'}</div>
+            <h1>Items apart of delivery</h1>
+            {items
+              .filter(item => item.deliveries_id === id)
+              .map(({ id, name, quantity }) => (
+                <>
+                  <div>Item name: {name}</div>
+                  <div>Item qty:{quantity}</div>
+                </>
+              ))}
           </div>
         ))}
       </div>
-    )
+    );
   }
 }
 
 function mapStateToProps(state) {
   return {
-    views: state.views
-  }
+    views: state.views,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    getItems: () => dispatch(getItems())
-  }
+    getItems: () => dispatch(getItems()),
+    getDeliveries: () => dispatch(getDeliveries()),
+    deleteItem: id => dispatch(deleteItem(id)),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Views);

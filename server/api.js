@@ -3,24 +3,40 @@ const router = express.Router();
 
 const db = require('./postgres');
 
-router.get('/', (req, res) => {
-  res.json({ message: 'Hello from router!' });
-});
-
 /**
- * @route   GET /api/donations/:table
- * @desc    Get all entries from specified table
+ * @route   GET /api/donations/items
+ * @desc    Get all item entries
  * @access  Public
  */
-router.get('/:table', async (req, res) => {
+router.get('/items', async (req, res) => {
   try {
-    const query = `SELECT * FROM ${req.params.table};`;
+    const query = `SELECT * FROM items;`;
     const result = await db.query(query);
-    res.json({ data: result.rows });
+    res.json({ items: result.rows });
   } catch ({ message }) {
     res.status(400).json({ message });
   }
 });
+
+/**
+ * @route   GET /api/donations/allDeliveries
+ * @desc    Get all deliveries
+ * @access  Public
+ */
+router.get('/allDeliveries', async (req, res) => {
+  try {
+    const query = `
+    SELECT * FROM deliveries;`
+
+    let deliveries = await db.query(query)
+    deliveries = deliveries.rows
+
+    res.json({ deliveries })
+
+  } catch ({ message }) {
+    res.status(418).json({ message })
+  }
+})
 
 /**
  * @route   POST /api/donations

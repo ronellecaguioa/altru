@@ -78,6 +78,8 @@ button:hover {
   padding: 10px;
   margin: 5px 0;
   transition: background-color 0.2s;
+  display: flex;
+  flex-direction: column;
 }
 
 .entry:hover {
