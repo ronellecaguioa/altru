@@ -4,3 +4,12 @@ CREATE TABLE users (
   email VARCHAR(40),
   thumbnail VARCHAR(100),
 );
+
+-- USERS TABLE
+
+CREATE TABLE users (
+  id UUID PRIMARY KEY NOT NULL,
+  username VARCHAR(24) NOT NULL,
+  email VARCHAR(48) NOT NULL,
+  password VARCHAR(64) NOT NULL
+);

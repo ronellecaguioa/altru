@@ -3,6 +3,7 @@ const path = require('path');
 const app = express();
 
 const donationsRouter = require('./api');
+const authRoute = require('./routes/auth-routes');
 
 // Body parsing middleware
 app.use(express.json());
@@ -10,6 +11,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Routes
 app.use('/api/donations', donationsRouter);
+app.use('/auth', authRoute);
 
 // Serve static files
 if (process.env.NODE_ENV === 'production') {
