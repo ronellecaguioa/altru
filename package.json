@@ -20,7 +20,11 @@
   "homepage": "https://github.com/ronellecaguioa/altru#readme",
   "dependencies": {
     "axios": "^0.19.2",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "passport": "^0.4.1",
+    "passport-github": "^1.1.0",
+    "passport-github2": "^0.1.12",
     "pg": "^8.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

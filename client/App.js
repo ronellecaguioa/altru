@@ -19,6 +19,13 @@ import './App.css'
 
 class App extends Component {
 
+  signIn = () => {
+    fetch('/auth/github', { mode: 'no-cors'})
+      .then(res => res.json())
+      .then(data => console.log(data))
+      .catch(err => console.log("ERROR", err))
+  }
+
   render() {
     return (
       <Provider store={store}>
@@ -27,7 +34,11 @@ class App extends Component {
           <div style={mainStyle}>
             <Switch>
               <Route exact path='/' render={() => (
-                <h1>Welcome to Altru</h1>
+                <>
+                  <h1>Welcome to Altru</h1>
+                  <button onClick={this.signIn}>sign in with github</button>
+                  {/* <button onClick={this.signIn}>sign in with github</button> */}
+                </>
               )}/>
               <Route exact path='/about' component={About}/>
               <Route exact path='/contact' component={Contact} />
