@@ -2,6 +2,7 @@ const router = require('express').Router();
 const db = require('../postgres');
 const cookieController = require('../controllers/cookieController');
 const userController = require('../controllers/userController');
+const sessionController = require('../controllers/sessionController');
 
 /**
  * @route   POST /auth/register
@@ -12,8 +13,9 @@ router.post(
   '/register',
   userController.createUser,
   cookieController.setSSIDCookie,
+  sessionController.startSession,
   (req, res) => {
-    res.json({ message: 'User succesfully created' })
+    res.json({ message: 'User succesfully created' });
   }
 );
 
@@ -22,6 +24,17 @@ router.post(
  * @desc    User attempts to log in with supplied username and email
  * @access  Public
  */
-router.post('/login', async (req, res) => {});
+router.post(
+  '/login',
+  userController.verifyUser,
+  cookieController.setSSIDCookie,
+  sessionController.startSession,
+  (req, res) => {
+    res.json({
+      message: `Successfully logged in as user ${res.locals.username}`,
+      loggedIn: true,
+    });
+  }
+);
 
 module.exports = router;

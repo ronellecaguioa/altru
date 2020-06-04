@@ -1,3 +1,5 @@
+const db = require('../postgres');
+
 const userController = {
   async createUser(req, res, next) {
     try {
@@ -6,12 +8,10 @@ const userController = {
       if (!username || !email || !password) {
         return res.status(401).json({ message: 'Please enter all fields' });
       }
-
       const query = `
         INSERT INTO users (id, username, email, password)
         VALUES (uuid_generate_v4(), $1, $2, crypt($3, gen_salt('bf', 10)))
         RETURNING *;`;
-
       let result = await db.query(query, [username, email, password]);
       result = result.rows[0];
       res.locals.userID = result.id;
@@ -26,8 +26,12 @@ const userController = {
     try {
       const { username, password } = req.body;
 
-      if (!username || !password)
-        return res.status(401).json({ message: 'Please enter all fields' });
+      if (!username || !password) {
+        return res.status(401).json({
+          loggedIn: false,
+          message: 'Please enter all fields',
+        });
+      }
 
       const query = `
         SELECT * FROM users
@@ -36,14 +40,21 @@ const userController = {
       let result = await db.query(query, [password]);
       result = result.rows[0];
       res.locals.userID = result.id;
+      res.locals.username = username;
 
       if (result && result.username === username) {
         return next();
       } else {
-        res.status(401).json({ message: 'Invalid credentials' });
+        res.status(401).json({
+          message: 'Invalid credentials',
+          loggedIn: false,
+        });
       }
     } catch ({ message }) {
-      res.status(400).json({ message });
+      res.status(400).json({
+        loggedIn: false,
+        message,
+      });
     }
   },
 };

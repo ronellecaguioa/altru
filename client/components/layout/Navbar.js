@@ -7,7 +7,7 @@ function Navbar() {
       <Link className='link' to='/'>Home</Link>
       <Link className='link' to='/about'>About</Link>
       <Link className='link' to='/contact'>Contact</Link>
-      <Link className='link' to='/register'>Register</Link>
+      <Link className='link' to='/user'>Sign In</Link>
       <Link className='link' to='/donate'>Donate</Link>
       <Link className='link' to='/views'>View your donations</Link>
     </div>

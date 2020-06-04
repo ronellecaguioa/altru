@@ -1,51 +1,63 @@
-import React, { Component, Fragment } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { createUser, registerChange } from '../../actions/authActions';
 
-class Register extends Component {
-  state = {
-    username: '',
-    email: '',
-    password: '',
-  };
+function Register() {
+  const [login, setLogin] = useState(false)
+  const dispatch = useDispatch();
+  const state = useSelector(state => state.auth);
 
-  handleChange = event => {
-    event.preventDefault();
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-  };
-
-  handleSubmit = event => {
-    event.preventDefault()
-    console.log(this.state)
-    this.setState({
-      username: '',
-      email: '',
-      password: ''
-    })
-  };
-
-  render() {
-    return (
-      <Fragment>
-        <form onSubmit={this.handleSubmit} className="form">
-          <h1>Make An Account</h1>
-          <label>
-            Username
-            <input type="text" placeholder="Username..." name="username" value={this.state.username}onChange={this.handleChange} required />
-          </label>
-          <label>
-            Email
-            <input type="email" placeholder="Email..." name="email" value={this.state.email}onChange={this.handleChange} required />
-          </label>
-          <label>
-            Password
-            <input type="password" placeholder="Password..." name="password" value={this.state.password}onChange={this.handleChange} required />
-          </label>
-          <button>Register for Altru</button>
-        </form>
-      </Fragment>
-    );
+  const handleChange = e => {
+    dispatch(registerChange(e.target))
   }
-}
 
+  const handleSubmit = e => {
+    e.preventDefault()
+    dispatch(createUser())
+  }
+
+  return (
+    <>
+      <form onSubmit={handleSubmit} className="form">
+        <h1>Make An Account</h1>
+        <label>
+          Username
+          <input
+            type="text"
+            placeholder="Username..."
+            name="username"
+            value={state.username}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <label>
+          Email
+          <input
+            type="email"
+            placeholder="Email..."
+            name="email"
+            value={state.email}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <label>
+          Password
+          <input
+            type="password"
+            placeholder="Password..."
+            name="password"
+            value={state.password}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <button>Register for Altru</button>
+      </form>
+    </>
+  );
+}
 
 export default Register;

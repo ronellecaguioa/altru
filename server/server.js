@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const cookieParser = require('cookie-parser')
+require('dotenv/config')
 
 const donationsRouter = require('./api');
 const authRoute = require('./routes/auth-routes');
@@ -8,6 +10,7 @@ const authRoute = require('./routes/auth-routes');
 // Body parsing middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser(process.env.COOKIE_KEY))
 
 // Routes
 app.use('/api/donations', donationsRouter);
