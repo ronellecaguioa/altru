@@ -1,4 +1,4 @@
-import { REGISTER_CHANGE, CLEAR_FIELDS } from '../actions/types';
+import { HANDLE_USER_CHANGE, CLEAR_FIELDS } from '../actions/types';
 
 const initialState = {
   username: '',
@@ -8,7 +8,7 @@ const initialState = {
 
 export default function authReducer(state = initialState, action) {
   switch (action.type) {
-    case REGISTER_CHANGE:
+    case HANDLE_USER_CHANGE:
       const { name, value } = action.payload;
       return {
         ...state,

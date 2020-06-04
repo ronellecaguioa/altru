@@ -1,6 +1,9 @@
 const db = require('../postgres');
 
 const userController = {
+  /**
+   * Register a new user with provided username, email, and password
+   */
   async createUser(req, res, next) {
     try {
       const { username, email, password } = req.body;
@@ -22,6 +25,9 @@ const userController = {
     }
   },
 
+  /**
+   * Check to see if supplied credentials exists in users database
+   */
   async verifyUser(req, res, next) {
     try {
       const { username, password } = req.body;

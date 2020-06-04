@@ -1,23 +1,33 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { handleChange, addItem, handleSubmit } from '../actions/entryActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleEntryChange, addItem, addDelivery } from '../actions/entryActions';
 
-function Donate(props) {
-  const { itemName, destination, pickup_by, pickup_from, quantity } = props.entry;
-  const { handleChange, addItem, handleSubmit } = props;
+function Donate() {
+  const dispatch = useDispatch();
+  const { itemName, destination, pickup_by, pickup_from, quantity } = useSelector(
+    state => state.entry
+  );
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    dispatch(addDelivery());
+  };
+
+  const handleChange = e => {
+    dispatch(handleEntryChange(e.target));
+  };
+
+  const add = () => {
+    dispatch(addItem())
+  }
 
   return (
     <div>
-      <form onSubmit={e => handleSubmit(e)}>
+      <form onSubmit={handleSubmit}>
         <h1>Make A Donation</h1>
         <label>
           Item:
-          <input
-            type="text"
-            name="itemName"
-            value={itemName}
-            onChange={e => handleChange(e.target)}
-          />
+          <input type="text" name="itemName" value={itemName} onChange={handleChange} />
         </label>
         <label>
           Quantity
@@ -27,9 +37,9 @@ function Donate(props) {
             max="50"
             name="itemQuantity"
             value={quantity}
-            onChange={e => handleChange(e.target)}
+            onChange={handleChange}
           />
-          <button style={addBtnStyle} type="button" onClick={addItem}>
+          <button style={addBtnStyle} type="button" onClick={add}>
             +
           </button>
         </label>
@@ -40,7 +50,7 @@ function Donate(props) {
             placeholder="Location..."
             name="destination"
             value={destination}
-            onChange={e => handleChange(e.target)}
+            onChange={handleChange}
           />
         </label>
         <label>
@@ -50,7 +60,7 @@ function Donate(props) {
             placeholder="Service..."
             name="pickup_by"
             value={pickup_by}
-            onChange={e => handleChange(e.target)}
+            onChange={handleChange}
           />
         </label>
         <label>
@@ -60,7 +70,7 @@ function Donate(props) {
             placeholder="Where to pick up items from..."
             name="pickup_from"
             value={pickup_from}
-            onChange={e => handleChange(e.target)}
+            onChange={handleChange}
           />
         </label>
         <button>Set delivery</button>
@@ -77,21 +87,7 @@ const addBtnStyle = {
   borderRadius: '50%',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center'
-}
+  justifyContent: 'center',
+};
 
-function mapStateToProps(state) {
-  return {
-    entry: state.entry,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    handleChange: changes => dispatch(handleChange(changes)),
-    addItem: () => dispatch(addItem()),
-    handleSubmit: e => dispatch(handleSubmit(e)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Donate);
+export default Donate;

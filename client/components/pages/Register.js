@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createUser, registerChange } from '../../actions/authActions';
 
 function Register() {
-  const [login, setLogin] = useState(false)
   const dispatch = useDispatch();
   const state = useSelector(state => state.auth);
 
   const handleChange = e => {
-    dispatch(registerChange(e.target))
-  }
+    dispatch(registerChange(e.target));
+  };
 
   const handleSubmit = e => {
-    e.preventDefault()
-    dispatch(createUser())
-  }
+    e.preventDefault();
+    dispatch(createUser());
+  };
 
   return (
     <>

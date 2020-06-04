@@ -1,4 +1,4 @@
-import { HANDLE_CHANGE, ADD_ITEM, HANDLE_SUBMIT } from '../actions/types';
+import { HANDLE_ENTRY_CHANGE, ADD_ITEM, ADD_DELIVERY } from '../actions/types';
 
 const initialState = {
   items: [],
@@ -11,7 +11,7 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case HANDLE_CHANGE:
+    case HANDLE_ENTRY_CHANGE:
       const { name, value } = action.payload;
       return {
         ...state,
@@ -29,17 +29,17 @@ export default function (state = initialState, action) {
       return {
         ...state,
         items: itemList,
-        itemName: 'shirt',
+        itemName: '',
         itemQuantity: 0,
       };
 
-    case HANDLE_SUBMIT:
+    case ADD_DELIVERY:
       return {
         ...state,
         destination: '',
         pickup_by: '',
         pickup_from: '',
-        itemName: 'shirt',
+        itemName: '',
         itemQuantity: 0,
       }
 

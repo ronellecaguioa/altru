@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('./postgres');
+const db = require('../postgres');
+
+/**************************\
+*           READ           *
+\**************************/
 
 /**
  * @route   GET /api/donations/items
@@ -37,6 +41,10 @@ router.get('/allDeliveries', async (req, res) => {
   }
 });
 
+/**************************\
+*         CREATE           *
+\**************************/
+
 /**
  * @route   POST /api/donations
  * @desc    Arrange new delivery and add new items to DB
@@ -46,7 +54,6 @@ router.post('/', async (req, res) => {
   try {
     // Destructure the request body
     const { items, destination, pickup_by, pickup_from } = req.body;
-    console.log('THE SERVER, ', req.body);
 
     // Prepare queries
     const deliveryQuery = `
@@ -81,6 +88,10 @@ router.post('/', async (req, res) => {
   }
 });
 
+/**************************\
+*         UPDATE           *
+\**************************/
+
 /**
  * @route   PATCH /api/donations/item/:id
  * @desc    Change information about an existing item
@@ -92,16 +103,11 @@ router.patch('/item/:id', async (req, res) => {
     const { name, quantity } = req.body;
     let changes;
 
-    if (name && quantity) {
-      // Updating name and quantity
-      changes = `SET name = '${name}', quantity = ${quantity}`;
-    } else if (name) {
-      // Updating name only
-      changes = `SET name = '${name}'`;
-    } else if (quantity) {
-      // Updating quantity only
-      changes = `SET quantity = ${quantity}`;
-    }
+    // Construct SET clause as needed
+    if (name) changes.push(`name = '${name}'`);
+    if (quantity) changes.push(`name = ${quantity}`);
+
+    changes = `SET ` + changes.join(', ');
 
     // Construct final query
     const query = `
@@ -136,9 +142,7 @@ router.patch('/delivery/:id', async (req, res) => {
 
     // Update destinations as needed
     if (destination) changes.push(`destination = '${destination}'`);
-
     if (pickup_by) changes.push(`pickup_by = '${pickup_by}'`);
-
     if (pickup_from) changes.push(`pickup_from = '${pickup_from}'`);
 
     // Construct final query
@@ -162,6 +166,10 @@ router.patch('/delivery/:id', async (req, res) => {
     res.status(418).json({ message });
   }
 });
+
+/**************************\
+*         DELETE           *
+\**************************/
 
 /**
  * @route   DELETE /api/donations/delivery/:id

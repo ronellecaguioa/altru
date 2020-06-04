@@ -1,10 +1,11 @@
 const express = require('express');
 const path = require('path');
-const app = express();
 const cookieParser = require('cookie-parser')
+const app = express();
 require('dotenv/config')
 
-const donationsRouter = require('./api');
+// Import routes
+const apiRoute = require('./routes/api-routes');
 const authRoute = require('./routes/auth-routes');
 
 // Body parsing middleware
@@ -13,10 +14,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_KEY))
 
 // Routes
-app.use('/api/donations', donationsRouter);
+app.use('/api/donations', apiRoute);
 app.use('/auth', authRoute);
 
-// Serve static files
+// Serve static files only in production mode
 if (process.env.NODE_ENV === 'production') {
   app.use('/dist', express.static(path.resolve(__dirname, '../dist')));
 

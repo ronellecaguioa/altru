@@ -1,13 +1,19 @@
-import { REGISTER_CHANGE, CLEAR_FIELDS } from './types';
+import { HANDLE_USER_CHANGE, CLEAR_FIELDS } from './types';
 import axios from 'axios';
 
+/**
+ * Handle onChange events associated with the User Component
+ */
 export function registerChange(changes) {
   return {
-    type: REGISTER_CHANGE,
+    type: HANDLE_USER_CHANGE,
     payload: changes,
   };
 }
 
+/**
+ * Submit a POST request to register a new user
+ */
 export function createUser() {
   return function (dispatch, getState) {
     const { username, email, password } = getState().auth;
@@ -23,6 +29,9 @@ export function createUser() {
   };
 }
 
+/**
+ * Submit a POST request to login a new user
+ */
 export function loginUser() {
   return function (dispatch, getState) {
     const { username, password } = getState().auth;
