@@ -6,13 +6,13 @@ import { Provider } from 'react-redux'
 import store from './store'
 
 // Import components
-import Navbar from './components/Navbar'
-import Contact from './components/Contact'
-import About from './components/About'
-import Register from './components/Register'
+import Navbar from './components/layout/Navbar'
+import Contact from './components/pages/Contact'
+import About from './components/pages/About'
+import Register from './components/pages/Register'
 import Donate from './components/Donate'
 import Views from './components/Views'
-import PageNotFound from './components/PageNotFound'
+import PageNotFound from './components/pages/PageNotFound'
 
 // Import styling
 import './App.css'

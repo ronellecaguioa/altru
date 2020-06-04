@@ -26,17 +26,16 @@ router.get('/items', async (req, res) => {
 router.get('/allDeliveries', async (req, res) => {
   try {
     const query = `
-    SELECT * FROM deliveries;`
+    SELECT * FROM deliveries;`;
 
-    let deliveries = await db.query(query)
-    deliveries = deliveries.rows
+    let deliveries = await db.query(query);
+    deliveries = deliveries.rows;
 
-    res.json({ deliveries })
-
+    res.json({ deliveries });
   } catch ({ message }) {
-    res.status(418).json({ message })
+    res.status(418).json({ message });
   }
-})
+});
 
 /**
  * @route   POST /api/donations
@@ -47,7 +46,7 @@ router.post('/', async (req, res) => {
   try {
     // Destructure the request body
     const { items, destination, pickup_by, pickup_from } = req.body;
-    console.log('THE SERVER, ', req.body)
+    console.log('THE SERVER, ', req.body);
 
     // Prepare queries
     const deliveryQuery = `
@@ -74,7 +73,7 @@ router.post('/', async (req, res) => {
     // Send successful message *** MAY be altered depending on the frontend ***
     res.json({
       message: 'success',
-      data: result.rows[0]
+      data: result.rows[0],
     });
   } catch ({ message }) {
     // Send 418 on unsuccessful response
@@ -125,7 +124,7 @@ router.patch('/item/:id', async (req, res) => {
 });
 
 /**
- * @route   PATCJ /api/donations/delivery/:id
+ * @route   PATCH /api/donations/delivery/:id
  * @desc    Change information about an existing delivery
  * @access  Public
  */
@@ -179,7 +178,6 @@ router.delete('/delivery/:id', async (req, res) => {
       RETURNING *;`;
 
     const deletedItems = await db.query(itemsQuery);
-    console.log(deletedItems);
 
     const deliveryQuery = `
       DELETE FROM deliveries
@@ -191,8 +189,8 @@ router.delete('/delivery/:id', async (req, res) => {
     // Send back successful response with deleted delivery and items
     res.json({
       message: 'Successfully cancelled delivery',
-      delivery: deletedDelivery.rows[0],
-      items: deletedItems.rows,
+      delivery: deletedDelivery.rows[0].id,
+      items: deletedItems.rows.map(item => item.id),
     });
   } catch ({ message }) {
     // Send back error message

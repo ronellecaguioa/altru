@@ -2,7 +2,7 @@ import { HANDLE_CHANGE, ADD_ITEM, HANDLE_SUBMIT } from '../actions/types';
 
 const initialState = {
   items: [],
-  itemName: 'shirt',
+  itemName: '',
   itemQuantity: 0,
   destination: '',
   pickup_by: '',

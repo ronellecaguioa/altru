@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_ITEMS, DELETE_ITEM, GET_DELIVERIES } from './types';
+import { GET_ITEMS, DELETE_ITEM, GET_DELIVERIES, DELETE_DELIVERY } from './types';
 
 export function getDeliveries() {
   return function (dispatch) {
@@ -31,16 +31,25 @@ export function getItems() {
 }
 
 export function deleteItem(id) {
-  console.log("TEH ID", id)
   return function (dispatch) {
     axios.delete(`/api/donations/item/${id}`)
       .then(res => {
-        console.log(res.data)
-        console.log(res.data.id)
         const { id: itemID } = res.data.item
         dispatch({
           type: DELETE_ITEM,
           payload: itemID
+        })
+      })
+  }
+}
+
+export function deleteDelivery(id) {
+  return function (dispatch) {
+    axios.delete(`/api/donations/delivery/${id}`)
+      .then(res => {
+        dispatch({
+          type: DELETE_DELIVERY,
+          payload: res.data
         })
       })
   }

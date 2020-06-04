@@ -12,11 +12,12 @@ function Donate(props) {
         <h1>Make A Donation</h1>
         <label>
           Item:
-          <select name="itemName" value={itemName} onChange={e => handleChange(e.target)}>
-            <option value="shirt">Shirt</option>
-            <option value="hat">Hats</option>
-            <option value="piano">Piano</option>
-          </select>
+          <input
+            type="text"
+            name="itemName"
+            value={itemName}
+            onChange={e => handleChange(e.target)}
+          />
         </label>
         <label>
           Quantity
@@ -28,8 +29,8 @@ function Donate(props) {
             value={quantity}
             onChange={e => handleChange(e.target)}
           />
-          <button type="button" onClick={addItem}>
-            Add
+          <button style={addBtnStyle} type="button" onClick={addItem}>
+            +
           </button>
         </label>
         <label>
@@ -66,6 +67,17 @@ function Donate(props) {
       </form>
     </div>
   );
+}
+
+// Styles
+const addBtnStyle = {
+  marginLeft: '5px',
+  height: '20px',
+  width: '20px',
+  borderRadius: '50%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
 }
 
 function mapStateToProps(state) {
