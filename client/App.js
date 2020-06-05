@@ -21,9 +21,17 @@ function App() {
   return (
     <Provider store={store}>
       <Navbar />
-      <div style={mainStyle}>
+      <div>
         <Switch>
-          <Route exact path="/" render={() => <h1>Welcome to Altru</h1>} />
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <div className="hero">
+                <h1>Welcome to Altru</h1>
+              </div>
+            )}
+          />
           <Route exact path="/about" component={About} />
           <Route exact path="/contact" component={Contact} />
           <Route exact path="/user" component={User} />
@@ -37,9 +45,9 @@ function App() {
 }
 
 // Styles
-const mainStyle = {
-  width: '90%',
-  margin: '0 5%',
-};
+// const mainStyle = {
+//   width: '90%',
+//   margin: '0 5%',
+// };
 
 export default App;

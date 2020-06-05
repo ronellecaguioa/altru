@@ -16,9 +16,9 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
-            plugins: ["@babel/plugin-proposal-class-properties"]
-          }
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+            plugins: ['@babel/plugin-proposal-class-properties'],
+          },
         },
       },
       {
@@ -26,14 +26,35 @@ module.exports = {
         exclude: /node_modules/,
         use: ['style-loader', 'css-loader'],
       },
+      {
+        test: /\.(jpe?g|png)$/,
+        exclude: /node_modules/,
+        use: [
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              mozjpeg: {
+                quality: 10,
+              },
+            },
+          },
+          {
+            loader: 'webp',
+            options: {
+
+            }
+          },
+        ],
+      },
     ],
   },
   devServer: {
-    hot: true, 
+    hot: true,
     historyApiFallback: true,
     proxy: {
       '/api': 'http://localhost:3000',
-      '/auth': 'http://localhost:3000'
-    }
+      '/auth': 'http://localhost:3000',
+    },
   },
 };

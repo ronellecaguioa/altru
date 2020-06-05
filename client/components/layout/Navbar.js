@@ -18,6 +18,7 @@ const navStyle = {
   display: 'flex',
   justifyContent: 'space-around',
   backgroundColor: '#333',
+  borderBottom: 'thin solid #ddd'
 }
 
 const linkStyle = {
