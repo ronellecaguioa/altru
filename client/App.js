@@ -20,7 +20,7 @@ import './App.css'
 class App extends Component {
 
   signIn = () => {
-    fetch('/auth/github', { mode: 'no-cors'})
+    fetch('/auth/github')
       .then(res => res.json())
       .then(data => console.log(data))
       .catch(err => console.log("ERROR", err))

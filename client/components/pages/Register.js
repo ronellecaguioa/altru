@@ -23,6 +23,13 @@ class Register extends Component {
     })
   };
 
+  github = () => {
+    fetch('/auth/github')
+      .then(res => res.json())
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  }
+
   render() {
     return (
       <Fragment>
@@ -42,6 +49,7 @@ class Register extends Component {
           </label>
           <button>Register for Altru</button>
         </form>
+        <button onClick={this.github}>Log in with github</button>
       </Fragment>
     );
   }
